@@ -10,14 +10,14 @@ const realSet = {start: -3, end: 2};
 const imaginarySet = {start: -1.5, end: 1.5};
 const colors = new Array(16).fill(0).map((_, i) => i === 0 ? '#000' : `#${((1 << 24) * Math.random() | 0).toString(16)}`).sort();
 
-let epoch = 2;
+let epoch = 3;
 const grayscaleSet = false;
 
 
 function mandelbrot(c) {
   let alpha = 1.0;
   let z = {re: 0, im: 0};
-  for (let i = 0; i < epoch; i++) {
+  for (let i = 0; i < epoch; i+=2) {
     let p = {
       re: Math.pow(z.re, 2) - Math.pow(z.im, 2),
       im: 2 * z.re * z.im
@@ -39,14 +39,14 @@ function content() {
 }
 
 function render() {
-  if (epoch >= 50) {
+  if (epoch >= 60) {
     window.cancelAnimationFrame(render);
-    //content();
+    setTimeout(content, 1000);
     return;
   }
 
-  for (let i = 0; i < width; i++) {
-    for (let j = 0; j < height; j++) {
+  for (let i = 0; i < width; i+=2) {
+    for (let j = 0; j < height; j+=2) {
       let c = {
         re: realSet.start + (i / width) * (realSet.end - realSet.start),
         im: imaginarySet.start + (j / height) * (imaginarySet.end - imaginarySet.start)
@@ -59,7 +59,7 @@ function render() {
       } else {
         ctx.fillStyle = colors[alpha === 1 ? 0 : parseInt(Math.pow(Math.tanh(alpha), 2) * 16)];
       }
-      ctx.fillRect(i, j, 1, 1);
+      ctx.fillRect(i, j, 2, 2);
     }
   }
   epoch += 2;
@@ -67,6 +67,7 @@ function render() {
 }
 
 function main() {
+  setTimeout(() => {canvas.style.opacity = 1;}, 300);
   render();
 }
 
