@@ -20,7 +20,7 @@ function mandelbrot(c, z={n: 0, re: 0, im: 0}) {
     let p = {
       re: Math.pow(z.re, 2) - Math.pow(z.im, 2),
       im: 2 * z.re * z.im
-    }
+    };
     z.re = p.re + c.re;
     z.im = p.im + c.im;
     z.n++;
@@ -48,8 +48,8 @@ function render() {
     return;
   }
 
-  for (let i = 0; i < width; i+=2) {
-    for (let j = 0; j < height; j+=2) {
+  for (let i = 0; i < width; i+=3) {
+    for (let j = 0; j < height; j+=3) {
       let c = {
         re: realSet.start + (i / width) * (realSet.end - realSet.start),
         im: imaginarySet.start + (j / height) * (imaginarySet.end - imaginarySet.start)
@@ -63,7 +63,7 @@ function render() {
       } else {
         ctx.fillStyle = colors[alpha === 1 ? 0 : parseInt(Math.pow(Math.tanh(alpha), 2) * 16)];
       }
-      ctx.fillRect(i, j, 2, 2);
+      ctx.fillRect(i, j, 3, 3);
     }
   }
   epoch += 2;
@@ -71,8 +71,9 @@ function render() {
 }
 
 function main() {
-  setTimeout(() => {canvas.style.opacity = 1;}, 200);
+  canvas.style.opacity = 1;
   render();
+  //content();
 }
 
 window.onload = main;
