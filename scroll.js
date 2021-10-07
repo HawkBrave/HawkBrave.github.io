@@ -43,6 +43,6 @@ const inViewCallback = entries => {
   });
 }
 
-let observer = new IntersectionObserver(inViewCallback, {threshold: 0.7}); 
+let observer = new IntersectionObserver(inViewCallback, {threshold: 0.5}); 
 
 scrollElements.forEach(el => observer.observe(el));
