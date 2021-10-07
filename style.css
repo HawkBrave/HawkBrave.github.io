@@ -110,12 +110,21 @@ ul {
     letter-spacing: 1px;
   }
   #name-big {
-    font-size: 7vw;
+    font-size: 8vw;
   }
   #name-title {
+    font-size: 6vw;
+  }
+  h2 {
+    font-size: 5vw;
+  }
+  h3 {
     font-size: 4vw;
   }
   p {
-    font-size: 3vw;
+    font-size: 4vw;
+  }
+  ul {
+    font-size: 4vw;
   }
 }
