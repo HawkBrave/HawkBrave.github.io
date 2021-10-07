@@ -48,8 +48,8 @@ function render() {
     return;
   }
 
-  for (let i = 0; i < width; i+=3) {
-    for (let j = 0; j < height; j+=3) {
+  for (let i = 0; i < width; i+=2) {
+    for (let j = 0; j < height; j+=2) {
       let c = {
         re: realSet.start + (i / width) * (realSet.end - realSet.start),
         im: imaginarySet.start + (j / height) * (imaginarySet.end - imaginarySet.start)
@@ -63,7 +63,7 @@ function render() {
       } else {
         ctx.fillStyle = colors[alpha === 1 ? 0 : parseInt(Math.pow(Math.tanh(alpha), 2) * 16)];
       }
-      ctx.fillRect(i, j, 3, 3);
+      ctx.fillRect(i, j, 2, 2);
     }
   }
   epoch += 2;
