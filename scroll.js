@@ -36,7 +36,8 @@ const scrollElements = document.querySelectorAll('#content > div');
 const inViewCallback = entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.classList.add('scrolled');  
+      entry.target.classList.add('scrolled');
+      entry.target.style.position = 'relative';
     } else { 
       entry.target.classList.remove('scrolled');
     }

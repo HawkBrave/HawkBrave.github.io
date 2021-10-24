@@ -13,6 +13,7 @@ const colors = new Array(16).fill(0).map((_, i) => i === 0 ? '#000' : `#${((1 <<
 let epoch = 3;
 const grayscaleSet = false;
 
+const sleep = async duration => new Promise(resolve => setTimeout(resolve, duration));
 
 function mandelbrot(c, z={n: 0, re: 0, im: 0}) {
   let alpha = 1.0;
@@ -41,7 +42,7 @@ function content() {
 let mbState = Array.from(Array(width), () => new Array(height));
 mbState.forEach(r => r.forEach(z => z = {n: 0, re: 0, im: 0}));
 
-function render() {
+async function render() {
   if (epoch >= 60) {
     window.cancelAnimationFrame(render);
     setTimeout(content, 1000);
@@ -67,6 +68,7 @@ function render() {
     }
   }
   epoch += 2;
+  await sleep(100);
   window.requestAnimationFrame(render);
 }
 
