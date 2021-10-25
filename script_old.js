@@ -34,10 +34,9 @@ function mandelbrot(c, z={n: 0, re: 0, im: 0}) {
   return alpha; 
 }
 
-function displayContent() {
-  canvas.style.opacity = 0;
-  const cont = document.querySelector('.content');
-  cont.style.opacity = 1;
+function content() {
+  const content = document.querySelector('#content');
+  content.style.opacity = '1';
 }
 
 let mbState = Array.from(Array(width), () => new Array(height));
@@ -46,7 +45,7 @@ mbState.forEach(r => r.forEach(z => z = {n: 0, re: 0, im: 0}));
 async function render() {
   if (epoch >= 60) {
     window.cancelAnimationFrame(render);
-    setTimeout(displayContent, 1000);
+    setTimeout(content, 1000);
     return;
   }
 
@@ -74,14 +73,9 @@ async function render() {
 }
 
 function main() {
-  const debug = true;
-
   canvas.style.opacity = 1;
-  if (debug) {
-    displayContent();
-  } else {
-    render();
-  }
+  //render();
+  content();
 }
 
 window.onload = main;
