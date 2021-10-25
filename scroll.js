@@ -37,7 +37,6 @@ const content = [
 let i = 0;
 let each = document.body.clientHeight / content.length;
 let container = document.querySelector('#container');
-container.innerHTML = content[0];
 
 function display(index) {
   if (i != index) {

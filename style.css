@@ -10,7 +10,7 @@ html, body {
 
 body {
   background-color: black;
-  height: 600vh;
+  height: 700vh;
 }
 
 h2 {
@@ -59,7 +59,6 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
 }
 
 #container > div {
