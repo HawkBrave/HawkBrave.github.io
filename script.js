@@ -35,6 +35,10 @@ function mandelbrot(c, z={n: 0, re: 0, im: 0}) {
 }
 
 function displayContent() {
+  //canvas.style.display = 'none';
+  canvas.style.position = 'fixed';
+  canvas.style.left = 0;
+  canvas.style.top = 0;
   canvas.style.opacity = 0;
   const cont = document.querySelector('.content');
   cont.style.opacity = 1;

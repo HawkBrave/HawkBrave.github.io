@@ -54,6 +54,5 @@ addEventListener('scroll', event => {
   let scroll = scrollY <= 0 ? 1 : scrollY;
   scroll = scroll >= document.body.clientHeight ? document.body.clientHeight : scroll;
   let pos = (scroll / each) >= content.length ? content.length-1 : Math.floor(scroll / each);
-  console.log(pos);
   display(pos);
 });
