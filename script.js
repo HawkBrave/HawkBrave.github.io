@@ -74,7 +74,7 @@ async function render() {
 }
 
 function main() {
-  const debug = true;
+  const debug = false;
 
   canvas.style.opacity = 1;
   if (debug) {
