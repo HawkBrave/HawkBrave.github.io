@@ -10,16 +10,25 @@ const content = [
     <h2>Experience</h2>
     <ul>
       <li>
+        <img src="https://www.johnsoncontrols.com/careers/-/media/jci/be/united-states/our-brands/final/johnson-controls.png?h=175&amp;w=400&amp;la=en&amp;hash=BD13FF9939946B200825EE0159B69A1B5CE2C78E" alt="Johnson Controls Logo" width="150">
+      </li>
+      <li>
         <img src="https://uploads-ssl.webflow.com/600ad06ae00a6210fd3a2752/60168f2182f72c40828afed9_Adastec.svg" loading="lazy" width="150" alt="" class="image-11">
       </li>
     </ul>
   </div>`,
   `<div id="education">
     <h2>Education</h2>
-    <h3>Technological University of Shannon - Bachelor of Science (B.S) in Software Design with Cloud Computing</h3>
-    <p><i>2021 - 2022</i><br>Athlone - Ireland</p>
-    <h3>Bilkent University - Bachelor of Science (B.S.) in Computer Technology and Information Systems</h3>
-    <p><i>2019 - 2023</i><br>Ankara - Turkey</p>
+    <ul>
+      <li>
+        <h3>Technological University of Shannon - Bachelor of Science in Software Design with Cloud Computing</h3>
+        <i>2021 - 2022</i><br>Athlone - Ireland
+      </li>
+      <li>
+        <h3>Bilkent University - Bachelor of Science in Computer Technology and Information Systems</h3>
+        <i>2019 - 2023</i><br>Ankara - Turkey
+      </li>
+    </ul>
   </div>`,
   `<div id="skills">
     <h2>Expertise</h2>
@@ -36,6 +45,7 @@ const content = [
 
 let i = 0;
 let each = document.body.clientHeight / content.length;
+
 let container = document.querySelector('#container');
 
 function display(index) {
@@ -48,11 +58,20 @@ function display(index) {
       container.innerHTML = content[index];
     }, 200);
   }
+  if (window.debug) {
+    console.log("clientHeight: " + document.body.clientHeight);
+    console.log("content.length: " + content.length);
+    console.log("each: " + each);
+  }
 }
 
 addEventListener('scroll', event => {
-  let scroll = scrollY <= 0 ? 1 : scrollY;
+  let scroll = scrollY + window.innerHeight / 2 <= 0 ? 1 : scrollY + window.innerHeight / 2;
   scroll = scroll >= document.body.clientHeight ? document.body.clientHeight : scroll;
   let pos = (scroll / each) >= content.length ? content.length-1 : Math.floor(scroll / each);
+  if (window.debug) {
+    console.log("scroll: " + scroll);
+    console.log("pos: " + pos);
+  }
   display(pos);
 });

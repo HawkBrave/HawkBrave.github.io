@@ -10,7 +10,7 @@ html, body {
 
 body {
   background-color: black;
-  height: 700vh;
+  height: 350vh;
 }
 
 h2 {
@@ -30,7 +30,19 @@ ul {
 }
 
 li {
-  margin-top: 5px;
+  margin-top: 10px;
+}
+
+#experience li {
+  margin-bottom: 15px;
+}
+
+#education > ul {
+  font-size: 1.5vw;
+}
+
+#education li {
+  margin-bottom: 15px;
 }
 
 #c {
