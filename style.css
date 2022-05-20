@@ -101,8 +101,12 @@ li {
   opacity: 1 !important;
 }
 
+#about {
+  min-height: 230px !important;
+}
+
 #education {
-  height: 600px !important;
+  min-height: 400px !important;
 }
 
 @media screen and (max-width: 900px) {
@@ -141,6 +145,6 @@ li {
     width: 350px;
   }
   #education {
-    height: 400px !important;
+    min-height: 300px !important;
   }
 }
