@@ -21,23 +21,39 @@ export default class Controller {
     if (this.context.pageIndex === 0
       && this.context.gl !== null) {
 
+      // draw entire screen rect
       const data = new GLData([
-        -1.0, -1.0,
-         3.0, -1.0,
-        -1.0,  3.0,
+       -1.0, -1.0,
+        1.0, -1.0,  
+        1.0,  1.0,
+       -1.0,  1.0
       ]);
+
       this.glController = new GLController(this.context.gl, data);
       
       const vertexShaderSource = await this.dispatcher.load('shaders/vertex.glsl');
       const fragmentShaderSource = await this.dispatcher.load('shaders/fragment.glsl');
 
       this.glController.initialize(vertexShaderSource, fragmentShaderSource);
-      this.glController.draw();
+
+
+      
 
       this.display.load(this.canvas);
     }
 
     this.display.render();
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    let maxiter = 50;
+    for (let i = 1; i < maxiter; i++) {
+      this.glController.draw(this.display.height, this.display.width, i);
+      if (i < maxiter / 2) {
+        await sleep(50);
+      } else {
+        await sleep(40);
+      }
+    }
   }
 
   _initializeCanvas() {
