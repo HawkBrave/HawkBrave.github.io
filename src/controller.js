@@ -45,14 +45,19 @@ export default class Controller {
     this.display.render();
 
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    let maxiter = 50;
+    let maxiter = 100;
     for (let i = 1; i < maxiter; i++) {
       this.glController.draw(this.display.height, this.display.width, i);
       if (i < maxiter / 2) {
-        await sleep(50);
+        await sleep(45);
       } else {
-        await sleep(40);
+        await sleep(35);
       }
+    }
+    await sleep(50);
+    for (let i = maxiter; i >= 0; i--) {
+      this.glController.draw(this.display.height, this.display.width, i);
+      await sleep(15);
     }
   }
 

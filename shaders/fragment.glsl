@@ -92,9 +92,9 @@ vec3 hsv2rgb(vec3 c) {
 }
 
 vec3 hsvcolored(float n) {
-	float hue = -(n / float(u_iterations));
+	float hue = n / -float(u_iterations);
 	float saturation = 1.0;
-	float value = n < float(u_iterations) ? 1.0 : 0.09;
+	float value = n < float(u_iterations) ? 1.0 : 0.0;
 	return hsv2rgb(vec3(hue, saturation, value));
 }
 
