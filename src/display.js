@@ -9,7 +9,7 @@ export default class Display {
     this.buffer = node;
   }
 
-  render() {
+  show() {
     this.container.replaceChild(this.buffer, this.container.children[0]);
   }
 }

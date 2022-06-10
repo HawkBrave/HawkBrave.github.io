@@ -1,123 +1,67 @@
 import GLData from './gldata.js';
-import WebGLUtils from '../utils/webglutils-basic.js';
+import GLAnimation from './glanimation.js';
 
 
 export default class GLController {
   /**
    * @param {WebGLRenderingContext} gl
-   * @param {GLData} data
+   * @param {GLData} globject
    */
-  constructor(gl, data) {
+  constructor(gl, globject) {
     this.gl = gl;
-    this.data = data;
+    this.globject = globject;
   }
 
-  /**
-   * 1. Get shaders
-   * 2. Get program
-   * 3. Get attribute locations
-   * 4. Create points buffer
-   * 5. Bind points buffer to ARRAY_BUFFER
-   * 6. Insert point data to ARRAY_BUFFER
-   */
-  initialize(vertexShaderSource, fragmentShaderSource) {
+  initialize() {
+    this.globject.compile();
 
-    const vertexShader = WebGLUtils.compileShader(
-      this.gl,
-      vertexShaderSource,
-      this.gl.VERTEX_SHADER
-    );
+    let boundlist = [
+      [ -2, 1, 
+        -1, 1 ],
+      [ -1.4883,  -1.4683,
+        -0.0065, 0.0065 ],
+      [ -0.34853774148008254, -0.6065922085831237
+        -0.34831493420245574, -0.606486596104741  ]
+    ]
 
-    const fragmentShader = WebGLUtils.compileShader(
-      this.gl,
-      fragmentShaderSource,
-      this.gl.FRAGMENT_SHADER
-    );
+    let orientation = {
+      width: this.gl.canvas.width,
+      height: this.gl.canvas.height
+    }
 
-    this.program = WebGLUtils.createProgram(this.gl, vertexShader, fragmentShader);
+    if (orientation.height > orientation.width) {
+      [orientation.height, orientation.width] = [orientation.width, orientation.height];
+    }
 
-    // get the position where to insert data
-    // vertex shader
-    this.positionAttributeLocation = this.gl.getAttribLocation(this.program, "a_position");
+    this.globject.setParameters({
+      iterations: 10,
+      boundaries: boundlist[1], 
+      screen: orientation
+    });
 
-    // fragment shader
-    this.iterationsUniformLocation = this.gl.getUniformLocation(this.program, "u_iterations");
-    this.boundariesUniformLocation = this.gl.getUniformLocation(this.program, "u_boundaries");
-    this.screenUniformLocation = this.gl.getUniformLocation(this.program, "u_screen");
+    this.globject.initialize();
 
-    this.pointsBuffer = this.gl.createBuffer();
+    this.animation = new GLAnimation(this.globject, 700);
 
-    // bind the buffer to ARRAY_BUFFER
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.pointsBuffer);
-
-    // insert data into ARRAY_BUFFER
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.data.points), this.gl.STATIC_DRAW);
-
-    // pair of shaders
-    this.gl.useProgram(this.program);
-
-    // turn on the attribute
-    this.gl.enableVertexAttribArray(this.positionAttributeLocation);
-
-    // specify how to use the vertex buffer
-    let size = 2;
-    let type = this.gl.FLOAT;
-    let normalize = false;
-    let stride = 0;
-    let offset = 0;
-    this.gl.vertexAttribPointer(
-      this.positionAttributeLocation,
-      size,
-      type,
-      normalize,
-      stride,
-      offset
-    );
-  }
-
-  /**
-   * 1. Resize canvas
-   * 2. Clear canvas
-   * 3. Create vertex pointer
-   * 4. Draw call
-   */
-  draw(height, width, iterations) {
     // clip space to pixels
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+  }
 
+  async draw() {
     // clear the canvas
     this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-    
+    for (;;) {
+      if (!this.animation.hasNextFrame()) break;
 
-    /*
-    width = window.innerWidth;
-    height = (400 / 600) * width;
-  
-    if (height > window.innerHeight) {
-      width = (600 / 400) * window.innerHeight;
-      height = window.innerHeight;
+      await this.animation.renderNextFrame(this.gl);
+
+      // draw call
+      const primitiveType = this.gl.TRIANGLE_FAN;
+      const count = 4;
+      const offset = 0;
+      this.gl.drawArrays(primitiveType, offset, count);
     }
-    const off = [window.innerWidth - width, window.innerHeight - height];
-
-    const boundries = [
-      -2 - (off[0] / 2) * (3 / width),
-      1 + (off[0] / 2) * (3 / width),
-      -1 - (off[1] / 2) * (2 / height),
-      1 + (off[1] / 2) * (2 / height),
-    ];
-    */
-    const boundries = [-2, 1, -1, 1];
-    this.gl.uniform1i(this.iterationsUniformLocation, iterations);
-    this.gl.uniform4fv(this.boundariesUniformLocation, boundries);
-    this.gl.uniform2f(this.screenUniformLocation, width, height);
-    //---
-
-    // draw call
-    let primitiveType = this.gl.TRIANGLE_FAN;
-    let count = 4;
-    let offset = 0;
-    this.gl.drawArrays(primitiveType, offset, count);
   }
 }

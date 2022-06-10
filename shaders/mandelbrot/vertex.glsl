@@ -1,4 +1,3 @@
-// receives data from buffer
 attribute vec2 a_position;
 
 varying vec3 v_color;
