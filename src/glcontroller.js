@@ -22,7 +22,7 @@ export default class GLController {
         -0.0065, 0.0065 ],
       [ -0.34853774148008254, -0.6065922085831237
         -0.34831493420245574, -0.606486596104741  ]
-    ]
+    ];
 
     let orientation = {
       width: this.gl.canvas.width,

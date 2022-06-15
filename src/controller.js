@@ -2,8 +2,8 @@ import Utils from "../utils/utils.js";
 import Dispatcher from "./dispatcher.js";
 import Display from "./display.js";
 import GLController from "./glcontroller.js";
-import GLData from "./gldata.js";
 import Mandelbrot from "./mandelbrot.js";
+import SiteCtx from "./sitectx.js";
 
 export default class Controller {
   /**
@@ -14,13 +14,13 @@ export default class Controller {
   constructor(dispatcher, display) {
     this.dispatcher = dispatcher;
     this.display = display;
+
+    this.canvas = this._initializeCanvas();
+    this.context = this._initializeContext();
   }
 
   async setup() {
-    this.canvas = this._initializeCanvas();
-    this.context = this._initializeContext();
-
-    if (this.context.pageIndex === 0
+    if (this.context.contentIdx === -1 
       && this.context.gl !== null) {
 
       const vertexShaderSource = await this.dispatcher.load('shaders/mandelbrot/vertex.glsl');
@@ -39,10 +39,17 @@ export default class Controller {
       this.glController.initialize();
 
       this.display.load(this.canvas);
-    }
-    this.display.show();
+      this.display.show();
 
-    await this.glController.draw();
+      await this.glController.draw();
+
+      this.context.contentIdx = 0;
+    }
+
+    const payload = await this.dispatcher.loadFromContext(this.context);
+
+    this.display.load(Utils.stringToHTML(payload));
+    this.display.show();
   }
 
   _initializeCanvas() {
@@ -53,14 +60,11 @@ export default class Controller {
   }
 
   _initializeContext() {
-    const context = {
-      pageIndex: 1,
-      gl: null
-    };
+    const context = new SiteCtx(0);
 
     const glContext = this.canvas.getContext('webgl');
     if (glContext !== null) {
-      context.pageIndex = 0;
+      context.contentIdx = -1;
       context.gl = glContext;
     }
 

@@ -1,3 +1,5 @@
+import Utils from "../utils/utils.js";
+
 export default class Display {
   constructor() {
     this.container = document.querySelector('#container');
@@ -9,7 +11,10 @@ export default class Display {
     this.buffer = node;
   }
 
+  // TODO: implement fading effect
   show() {
     this.container.replaceChild(this.buffer, this.container.children[0]);
+    console.log(this.container);
+    //Utils.fade(this.container.firstChild);
   }
 }
