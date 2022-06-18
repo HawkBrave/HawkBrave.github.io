@@ -1,4 +1,7 @@
-1. Improve GLController
-2. Improve GLData
-3. Improve context of Controller
-4. Change content
+# TODO
+
+- [x] Improve GLController
+- [ ] Improve GLData
+- [x] Improve context of Controller
+- [ ] Change content
+- [ ] Add compilation method for content

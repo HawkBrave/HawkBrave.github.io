@@ -38,8 +38,9 @@ export default class Controller {
 
       this.glController.initialize();
 
+
       this.display.load(this.canvas);
-      this.display.show();
+      this.display.show(false);
 
       await this.glController.draw();
 
@@ -47,15 +48,17 @@ export default class Controller {
     }
 
     const payload = await this.dispatcher.loadFromContext(this.context);
+    // TODO: make webpage long (scrollable)
+    document.body.style.height = `${this.dispatcher.fileDict.length * 100}vh`;
 
     this.display.load(Utils.stringToHTML(payload));
-    this.display.show();
+    this.display.show(true);
   }
 
   _initializeCanvas() {
     const canvas = document.createElement('canvas');
-    canvas.height = this.display.height;
-    canvas.width = this.display.width;
+    canvas.height = this.display.getHeight();
+    canvas.width = this.display.getWidth();
     return canvas;
   }
 
@@ -71,7 +74,34 @@ export default class Controller {
     return context;
   }
 
+  /*
+  async _updateCycle() {
+    this.dispatcher.loadFromContext(this.context);
+    this.display.load()
+  }
+  */
+
   listen() {
-    // TODO: handle scroll event
+    let contentLength = this.dispatcher.fileDict.length;
+    let pixelsPerSection = this.display.getBodyHeight() / contentLength;
+
+    addEventListener('scroll', async event => {
+      let scrollWithBoundaries = scrollY + window.innerHeight / 2 <= 0 ? 1 : scrollY + window.innerHeight / 2;
+      scrollWithBoundaries = scrollWithBoundaries >= document.body.clientHeight ? document.body.clientHeight : scrollWithBoundaries;
+
+      let pos = (scrollWithBoundaries / pixelsPerSection) >= contentLength ? contentLength-1 : Math.floor(scrollWithBoundaries / pixelsPerSection); 
+
+      if (this.context.contentIdx !== pos) {
+        this.context.contentIdx = pos;
+        const payload = await this.dispatcher.loadFromContext(this.context);
+        this.display.load(Utils.stringToHTML(payload));
+        this.display.show(true);
+      }
+    });
+
+    /*
+    const observer = new MutationObserver(() => {})
+    observer.observe(this.display.container, {subtree: true});
+    */
   }
 }

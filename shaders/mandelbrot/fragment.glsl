@@ -7,7 +7,7 @@ varying vec3 v_color;
 const int MAX_ITER = 10000;
 const float BOUND = 16.0;
 
-const int MAX_SAMPLING_RATE = 4096;
+const int MAX_SAMPLING_RATE = 4096 / 4;
 
 
 float mandelbrot(vec2 c)
@@ -125,6 +125,7 @@ void main()
   float y = gl_FragCoord.y - 0.5;
   
   float p = render(x, y);
+//  float p = superSampling(x, y);
   vec3 color = hsvcolored(p);
 
   gl_FragColor = vec4(color, 1.0);
