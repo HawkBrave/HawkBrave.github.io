@@ -2,8 +2,8 @@ import Utils from "../utils/utils.js";
 import Dispatcher from "./dispatcher.js";
 import Display from "./display.js";
 import GLController from "./glcontroller.js";
-import GLData from "./gldata.js";
 import Mandelbrot from "./mandelbrot.js";
+import SiteCtx from "./sitectx.js";
 
 export default class Controller {
   /**
@@ -14,13 +14,13 @@ export default class Controller {
   constructor(dispatcher, display) {
     this.dispatcher = dispatcher;
     this.display = display;
+
+    this.canvas = this._initializeCanvas();
+    this.context = this._initializeContext();
   }
 
   async setup() {
-    this.canvas = this._initializeCanvas();
-    this.context = this._initializeContext();
-
-    if (this.context.pageIndex === 0
+    if (this.context.contentIdx === -1 
       && this.context.gl !== null) {
 
       const vertexShaderSource = await this.dispatcher.load('shaders/mandelbrot/vertex.glsl');
@@ -38,36 +38,70 @@ export default class Controller {
 
       this.glController.initialize();
 
-      this.display.load(this.canvas);
-    }
-    this.display.show();
 
-    await this.glController.draw();
+      this.display.load(this.canvas);
+      this.display.show(false);
+
+      await this.glController.draw();
+
+      this.context.contentIdx = 0;
+    }
+
+    const payload = await this.dispatcher.loadFromContext(this.context);
+    // TODO: make webpage long (scrollable)
+    document.body.style.height = `${this.dispatcher.fileDict.length * 100}vh`;
+
+    this.display.load(Utils.stringToHTML(payload));
+    this.display.show(true);
   }
 
   _initializeCanvas() {
     const canvas = document.createElement('canvas');
-    canvas.height = this.display.height;
-    canvas.width = this.display.width;
+    canvas.height = this.display.getHeight();
+    canvas.width = this.display.getWidth();
     return canvas;
   }
 
   _initializeContext() {
-    const context = {
-      pageIndex: 1,
-      gl: null
-    };
+    const context = new SiteCtx(0);
 
     const glContext = this.canvas.getContext('webgl');
     if (glContext !== null) {
-      context.pageIndex = 0;
+      context.contentIdx = -1;
       context.gl = glContext;
     }
 
     return context;
   }
 
+  /*
+  async _updateCycle() {
+    this.dispatcher.loadFromContext(this.context);
+    this.display.load()
+  }
+  */
+
   listen() {
-    // TODO: handle scroll event
+    let contentLength = this.dispatcher.fileDict.length;
+    let pixelsPerSection = this.display.getBodyHeight() / contentLength;
+
+    addEventListener('scroll', async event => {
+      let scrollWithBoundaries = scrollY + window.innerHeight / 2 <= 0 ? 1 : scrollY + window.innerHeight / 2;
+      scrollWithBoundaries = scrollWithBoundaries >= document.body.clientHeight ? document.body.clientHeight : scrollWithBoundaries;
+
+      let pos = (scrollWithBoundaries / pixelsPerSection) >= contentLength ? contentLength-1 : Math.floor(scrollWithBoundaries / pixelsPerSection); 
+
+      if (this.context.contentIdx !== pos) {
+        this.context.contentIdx = pos;
+        const payload = await this.dispatcher.loadFromContext(this.context);
+        this.display.load(Utils.stringToHTML(payload));
+        this.display.show(true);
+      }
+    });
+
+    /*
+    const observer = new MutationObserver(() => {})
+    observer.observe(this.display.container, {subtree: true});
+    */
   }
 }

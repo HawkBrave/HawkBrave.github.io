@@ -1,4 +1,13 @@
 export default class Dispatcher {
+  constructor() {
+    // TODO: add other files
+    this.fileDict = [
+      'name.html',
+      'about.html',
+      'mandelbrot.html'
+    ];
+  }
+
   /**
    * Fetches the file specified in the given path and returns its content as a string.
    * @param {string} filePath
@@ -13,5 +22,10 @@ export default class Dispatcher {
       console.log(ex);
     }
     return dat;
+  }
+
+  async loadFromContext(ctx) {
+    const fileName = this.fileDict[ctx.contentIdx];
+    return this.load(`content/${fileName}`);
   }
 }

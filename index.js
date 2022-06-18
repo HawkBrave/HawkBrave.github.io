@@ -1,6 +1,7 @@
 import Dispatcher from './src/dispatcher.js';
 import Controller from './src/controller.js';
 import Display from './src/display.js';
+import Utils from './utils/utils.js';
 
 
 async function main() {
@@ -12,5 +13,8 @@ async function main() {
 
   controller.listen();
 }
+
+// exports
+window.goBackTop = () => Utils.goBackTop();
 
 window.onload = main;
