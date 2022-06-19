@@ -18,30 +18,36 @@ export default class GLController {
     let boundlist = [
       [ -2, 1, 
         -1, 1 ],
-      [ -1.4883,  -1.4683,
-        -0.0065, 0.0065 ],
+      [ -1.4883, -1.4683,
+        -0.0065,  0.0065 ],
       [ -0.34853774148008254, -0.6065922085831237
-        -0.34831493420245574, -0.606486596104741  ]
+        -0.34831493420245574, -0.606486596104741  ],
+      [
+        -1.4845855125, -1.4845773125,
+        -0.0000032000,  0.0000032000
+      ]
     ];
 
     let orientation = {
       width: this.gl.canvas.width,
-      height: this.gl.canvas.height
+      height: this.gl.canvas.height,
+      rotate: false
     }
 
     if (orientation.height > orientation.width) {
       [orientation.height, orientation.width] = [orientation.width, orientation.height];
+      orientation.rotate = true;
     }
 
     this.globject.setParameters({
       iterations: 10,
       boundaries: boundlist[1], 
-      screen: orientation
+      orientation
     });
 
     this.globject.initialize();
 
-    this.animation = new GLAnimation(this.globject, 700);
+    this.animation = new GLAnimation(this.globject, 500);
 
     // clip space to pixels
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

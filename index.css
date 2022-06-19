@@ -84,6 +84,7 @@ p {
   #mandelbrot-ascii {
     font-size: 3px;
     letter-spacing: 2px;
+    transform: rotate(-90deg);
   }
   h1 {
     font-size: 5vh;

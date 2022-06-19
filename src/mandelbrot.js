@@ -16,7 +16,7 @@ export default class Mandelbrot extends GLData {
     this.parametersReady = false;
   }
 
-  setParameters({iterations, boundaries, screen}) {
+  setParameters({iterations, boundaries, orientation}) {
     let changed = false;
 
     if (typeof iterations !== "undefined") {
@@ -27,12 +27,12 @@ export default class Mandelbrot extends GLData {
       this.boundaries = boundaries;
       changed = true;
     }
-    if (typeof screen !== "undefined") {
-      this.screen = screen;
+    if (typeof orientation !== "undefined") {
+      this.orientation = orientation;
       changed = true;
     }
 
-    if (this.iterations && this.boundaries && this.screen) this.parametersReady = true;
+    if (this.iterations && this.boundaries && this.orientation) this.parametersReady = true;
     return changed;
   }
 
@@ -88,6 +88,8 @@ export default class Mandelbrot extends GLData {
     this.iterationsUniformLocation = this.gl.getUniformLocation(this.program, "u_iterations");
     this.boundariesUniformLocation = this.gl.getUniformLocation(this.program, "u_boundaries");
     this.screenUniformLocation = this.gl.getUniformLocation(this.program, "u_screen");
+    const rotationUniformLocation = this.gl.getUniformLocation(this.program, "u_rotation");
+    this.gl.uniform1i(rotationUniformLocation, this.orientation.rotate);
 
     this.initialized = true;
   }
@@ -95,7 +97,7 @@ export default class Mandelbrot extends GLData {
   _updateUniformValues() {
     this.gl.uniform1i(this.iterationsUniformLocation, this.iterations);
     this.gl.uniform4fv(this.boundariesUniformLocation, this.boundaries);
-    this.gl.uniform2f(this.screenUniformLocation, this.screen.width, this.screen.height);
+    this.gl.uniform2f(this.screenUniformLocation, this.orientation.width, this.orientation.height);
   }
 
   render(params) {
