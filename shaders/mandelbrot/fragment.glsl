@@ -1,13 +1,14 @@
 uniform int u_iterations;
 uniform vec4 u_boundaries;
 uniform vec2 u_screen;
+uniform bool u_rotation;
 
 varying vec3 v_color;
 
 const int MAX_ITER = 10000;
-const float BOUND = 16.0;
+const float BOUND = 4.1;
 
-const int MAX_SAMPLING_RATE = 4096 / 4;
+const int MAX_SAMPLING_RATE = 4096;
 
 
 float mandelbrot(vec2 c)
@@ -67,7 +68,7 @@ float render(float x, float y)
 }
 
 float superSampling(float x, float y) {
-  int samplingRate = 1;
+  int samplingRate = 2;
 	float change = 1.0 / (float(samplingRate) + 1.0);
 	float m = 0.0;
 	for (int i = 1; i < MAX_SAMPLING_RATE + 1; i++) {
@@ -78,7 +79,7 @@ float superSampling(float x, float y) {
 			if (j > samplingRate) {
 				break;
 			}
-			m = m + render(x + float(i) * change, y + float(j) * change);
+			m += render(x + float(i) * change, y + float(j) * change);
 		}
 	}
 	return m / float(samplingRate * samplingRate);
@@ -123,6 +124,12 @@ void main()
 {
   float x = gl_FragCoord.x - 0.5;
   float y = gl_FragCoord.y - 0.5;
+
+  if (u_rotation) {
+    float temp = x;
+    x = y;
+    y = temp;
+  }
   
   float p = render(x, y);
 //  float p = superSampling(x, y);
