@@ -16,10 +16,15 @@
   font-display: swap;
 }
 
+:root {
+  --site-blue: rgb(81, 172, 214);
+  --site-gray: rgba(255, 255, 255, 0.7);
+}
 
 html, body {
   width: 100%;
   background-color: #000;
+  font-size: 2vw;
 }
 
 body {
@@ -38,20 +43,30 @@ canvas {
 }
 
 h1 {
-  font-size: 4vw;
+  font-size: 4.5vw;
 }
 
 h2 {
-  font-size: 3vw;
+  font-size: 3.5vw;
 }
 
 h3 {
-  font-size: 2vw;
+  font-size: 2.5vw;
 }
 
 p {
-  font-size: 2vw;
   text-align: justify;
+}
+
+a {
+  color: var(--site-blue);
+  text-decoration: none;
+}
+
+ul {
+  line-height: 2em;
+  list-style: none;
+  text-align: center;
 }
 
 
@@ -74,6 +89,25 @@ p {
   height: 300px;
 }
 
+h2[name="section-title"] {
+  position: fixed;
+}
+
+div[name="section-body"] {
+  display: flex; 
+  flex-direction: column; 
+  align-content: space-between;
+}
+
+#about {
+  width: 500px;
+  height: 350px;
+}
+
+#quote {
+  font-size: 2.5vw;
+}
+
 #mandelbrot-ascii {
   font-family: monospace !important;
   font-size: 5px;
@@ -86,6 +120,16 @@ p {
     letter-spacing: 2px;
     transform: rotate(-90deg);
   }
+
+  #about {
+    width: 250px;
+    height: 300px;
+  }
+
+  #quote {
+    font-size: 3vh;
+  }
+
   h1 {
     font-size: 5vh;
     top: -200px;
@@ -97,6 +141,9 @@ p {
     font-size: 3vh;
   }
   p {
+    font-size: 2vh;
+  }
+  ul {
     font-size: 2.5vh;
   }
   

@@ -3,7 +3,10 @@ export default class Dispatcher {
     // TODO: add other files
     this.fileDict = [
       'name.html',
+      'whoami.html',
       'about.html',
+      'interests.html',
+      'projects.html',
       'mandelbrot.html'
     ];
   }
