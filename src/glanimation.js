@@ -1,4 +1,4 @@
-import Utils from "../utils/utils.js";
+import Utils from '../utils/utils.js';
 
 export default class GLAnimation {
   constructor(globject, frameCount) {

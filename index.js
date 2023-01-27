@@ -3,7 +3,6 @@ import Controller from './src/controller.js';
 import Display from './src/display.js';
 import Utils from './utils/utils.js';
 
-
 async function main() {
   const dispatcher = new Dispatcher();
   const display = new Display();

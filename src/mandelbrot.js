@@ -1,10 +1,10 @@
-import GLData from "./gldata.js";
+import GLData from './gldata.js';
 import WebGLUtils from '../utils/webglutils-basic.js';
 
 export default class Mandelbrot extends GLData {
-  /** 
+  /**
    * @param {WebGLRenderingContext} gl
-  */
+   */
   constructor(points, gl, vertexShader, fragmentShader) {
     super(points);
     this.gl = gl;
@@ -19,37 +19,39 @@ export default class Mandelbrot extends GLData {
   setParameters({iterations, boundaries, orientation}) {
     let changed = false;
 
-    if (typeof iterations !== "undefined") {
+    if (typeof iterations !== 'undefined') {
       this.iterations = iterations;
       changed = true;
     }
-    if (typeof boundaries !== "undefined") {
+    if (typeof boundaries !== 'undefined') {
       this.boundaries = boundaries;
       changed = true;
     }
-    if (typeof orientation !== "undefined") {
+    if (typeof orientation !== 'undefined') {
       this.orientation = orientation;
       changed = true;
     }
 
-    if (this.iterations && this.boundaries && this.orientation) this.parametersReady = true;
+    if (this.iterations && this.boundaries &&
+        this.orientation) this.parametersReady = true;
     return changed;
   }
 
   compile() {
     const vertexShader = WebGLUtils.compileShader(
-      this.gl,
-      this.vertexShader,
-      this.gl.VERTEX_SHADER
+        this.gl,
+        this.vertexShader,
+        this.gl.VERTEX_SHADER,
     );
 
     const fragmentShader = WebGLUtils.compileShader(
-      this.gl,
-      this.fragmentShader,
-      this.gl.FRAGMENT_SHADER
+        this.gl,
+        this.fragmentShader,
+        this.gl.FRAGMENT_SHADER,
     );
 
-    this.program = WebGLUtils.createProgram(this.gl, vertexShader, fragmentShader);
+    this.program = WebGLUtils.createProgram(this.gl, vertexShader,
+        fragmentShader);
 
     this.compiled = true;
     return this.program;
@@ -58,7 +60,8 @@ export default class Mandelbrot extends GLData {
   initialize() {
     const pointsBuffer = this.gl.createBuffer();
 
-    const positionAttribLocation = this.gl.getAttribLocation(this.program, "a_position");
+    const positionAttribLocation = this.gl.getAttribLocation(this.program,
+        'a_position');
     this.gl.enableVertexAttribArray(positionAttribLocation);
 
     // bind the buffer to ARRAY_BUFFER
@@ -77,18 +80,22 @@ export default class Mandelbrot extends GLData {
     const stride = 0;
     const offset = 0;
     this.gl.vertexAttribPointer(
-      positionAttribLocation,
-      size,
-      type,
-      normalize,
-      stride,
-      offset
+        positionAttribLocation,
+        size,
+        type,
+        normalize,
+        stride,
+        offset,
     );
 
-    this.iterationsUniformLocation = this.gl.getUniformLocation(this.program, "u_iterations");
-    this.boundariesUniformLocation = this.gl.getUniformLocation(this.program, "u_boundaries");
-    this.screenUniformLocation = this.gl.getUniformLocation(this.program, "u_screen");
-    const rotationUniformLocation = this.gl.getUniformLocation(this.program, "u_rotation");
+    this.iterationsUniformLocation = this.gl.getUniformLocation(this.program,
+        'u_iterations');
+    this.boundariesUniformLocation = this.gl.getUniformLocation(this.program,
+        'u_boundaries');
+    this.screenUniformLocation = this.gl.getUniformLocation(this.program,
+        'u_screen');
+    const rotationUniformLocation = this.gl.getUniformLocation(this.program,
+        'u_rotation');
     this.gl.uniform1i(rotationUniformLocation, this.orientation.rotate);
 
     this.initialized = true;
@@ -97,7 +104,8 @@ export default class Mandelbrot extends GLData {
   _updateUniformValues() {
     this.gl.uniform1i(this.iterationsUniformLocation, this.iterations);
     this.gl.uniform4fv(this.boundariesUniformLocation, this.boundaries);
-    this.gl.uniform2f(this.screenUniformLocation, this.orientation.width, this.orientation.height);
+    this.gl.uniform2f(this.screenUniformLocation, this.orientation.width,
+        this.orientation.height);
   }
 
   render(params) {

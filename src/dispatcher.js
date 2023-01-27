@@ -7,7 +7,7 @@ export default class Dispatcher {
       'about.html',
       'interests.html',
       'projects.html',
-      'mandelbrot.html'
+      'mandelbrot.html',
     ];
   }
 
