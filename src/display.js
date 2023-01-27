@@ -1,4 +1,4 @@
-import Utils from "../utils/utils.js";
+import Utils from '../utils/utils.js';
 
 export default class Display {
   constructor() {
@@ -7,8 +7,7 @@ export default class Display {
   }
 
   /**
-   * 
-   * @param {HTMLElement} node 
+   * @param {HTMLElement} node
    */
   load(node) {
     this.title = node.children.namedItem('section-title');
@@ -17,23 +16,34 @@ export default class Display {
 
   async show(fading) {
     if (this.title) {
+      //this.container.replaceChild(this.title, this.container.children[0]);
+      this.node.children.namedItem('section-body').style.visibility = 'hidden';
+      this.title.style.visibility = 'hidden';
+      this.container.replaceChild(this.node, this.container.children[0]);
+      let titlePos = this.title.getBoundingClientRect().y;
+      this.title.style.bottom = `${titlePos - this.getHeight() / 2}px`;
+      this.title.style.visibility = 'visible';
+
       if (fading && !this.context.busy['unfade']) {
         Utils.unfade(this.title, this.context);
       }
-      this.container.replaceChild(this.title, this.container.children[0]);
+
       await Utils.sleepUntilContextIsFree(this.context, 'unfade');
       await Utils.sleep(100);
-      Utils.move(this.title, 'up', this.getHeight()/2, this.getHeight()/2 + 200, this.context);
+      Utils.moveFromDisposition(this.title, 'up',
+          titlePos - this.getHeight() / 2, 0, this.context);
       await Utils.sleepUntilContextIsFree(this.context, 'move');
-    } 
-    
-    this.container.replaceChild(this.node, this.container.children[0]);
-    
-    if (fading && !this.context.busy['unfade']) {
+    } else {
+      this.container.replaceChild(this.node, this.container.children[0]);
+    }
+
+    if (fading && !this.context.busy['unfade'] && !this.context.busy['move']) {
+      this.node.children.namedItem('section-body').style.visibility = 'visible';
       Utils.unfade(this.node.children.namedItem('section-body'), this.context);
     }
     if (this.title) {
-      this.container.children[0].insertBefore(this.title, this.container.children[0].children[0]);
+      this.container.children[0].insertBefore(this.title,
+          this.container.children[0].children[0]);
     }
   }
 

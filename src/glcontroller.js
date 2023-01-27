@@ -1,7 +1,6 @@
 import GLData from './gldata.js';
 import GLAnimation from './glanimation.js';
 
-
 export default class GLController {
   /**
    * @param {WebGLRenderingContext} gl
@@ -16,33 +15,38 @@ export default class GLController {
     this.globject.compile();
 
     let boundlist = [
-      [ -2, 1, 
-        -1, 1 ],
-      [ -1.4883, -1.4683,
-        -0.0065,  0.0065 ],
-      [ -0.34853774148008254, -0.6065922085831237
-        -0.34831493420245574, -0.606486596104741  ],
+      [
+        -2, 1,
+        -1, 1],
+      [
+        -1.4883, -1.4683,
+        -0.0065, 0.0065],
+      [
+        -0.34853774148008254, -0.6065922085831237
+      - 0.34831493420245574, -0.606486596104741],
       [
         -1.4845855125, -1.4845773125,
-        -0.0000032000,  0.0000032000
-      ]
+        -0.0000032000, 0.0000032000,
+      ],
     ];
 
     let orientation = {
       width: this.gl.canvas.width,
       height: this.gl.canvas.height,
-      rotate: false
-    }
+      rotate: false,
+    };
 
     if (orientation.height > orientation.width) {
-      [orientation.height, orientation.width] = [orientation.width, orientation.height];
+      [orientation.height, orientation.width] = [
+        orientation.width,
+        orientation.height];
       orientation.rotate = true;
     }
 
     this.globject.setParameters({
       iterations: 10,
-      boundaries: boundlist[1], 
-      orientation
+      boundaries: boundlist[1],
+      orientation,
     });
 
     this.globject.initialize();
@@ -58,7 +62,7 @@ export default class GLController {
     this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 
-    for (;;) {
+    for (; ;) {
       if (!this.animation.hasNextFrame()) break;
 
       await this.animation.renderNextFrame(this.gl);

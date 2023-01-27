@@ -1,15 +1,15 @@
-import Utils from "../utils/utils.js";
-import Dispatcher from "./dispatcher.js";
-import Display from "./display.js";
-import GLController from "./glcontroller.js";
-import Mandelbrot from "./mandelbrot.js";
-import SiteCtx from "./sitectx.js";
+import Utils from '../utils/utils.js';
+import Dispatcher from './dispatcher.js';
+import Display from './display.js';
+import GLController from './glcontroller.js';
+import Mandelbrot from './mandelbrot.js';
+import SiteCtx from './sitectx.js';
 
 export default class Controller {
   /**
-   * 
-   * @param {Dispatcher} dispatcher 
-   * @param {Display} display 
+   *
+   * @param {Dispatcher} dispatcher
+   * @param {Display} display
    */
   constructor(dispatcher, display) {
     this.dispatcher = dispatcher;
@@ -20,24 +20,26 @@ export default class Controller {
   }
 
   async setup() {
-    if (this.context.contentIdx === -1 
-      && this.context.gl !== null) {
+    if (this.context.contentIdx === -1
+        && this.context.gl !== null) {
 
-      const vertexShaderSource = await this.dispatcher.load('shaders/mandelbrot/vertex.glsl');
+      const vertexShaderSource = await this.dispatcher.load(
+          'shaders/mandelbrot/vertex.glsl');
       const utilsShader = await this.dispatcher.load('shaders/utils.glsl');
-      const fragmentShaderSource = await this.dispatcher.load('shaders/mandelbrot/fragment.glsl');
+      const fragmentShaderSource = await this.dispatcher.load(
+          'shaders/mandelbrot/fragment.glsl');
       // draw entire screen rect
       const mandelbrot = new Mandelbrot([
-       -1.0, -1.0,
-        1.0, -1.0,  
-        1.0,  1.0,
-       -1.0,  1.0
-      ], this.context.gl, vertexShaderSource, utilsShader + fragmentShaderSource);
+            -1.0, -1.0,
+            1.0, -1.0,
+            1.0, 1.0,
+            -1.0, 1.0,
+          ], this.context.gl, vertexShaderSource,
+          utilsShader + fragmentShaderSource);
 
       this.glController = new GLController(this.context.gl, mandelbrot);
 
       this.glController.initialize();
-
 
       this.display.load(this.canvas);
       this.display.show(false);
@@ -86,10 +88,17 @@ export default class Controller {
     let pixelsPerSection = this.display.getBodyHeight() / contentLength;
 
     addEventListener('scroll', async event => {
-      let scrollWithBoundaries = scrollY + window.innerHeight / 2 <= 0 ? 1 : scrollY + window.innerHeight / 2;
-      scrollWithBoundaries = scrollWithBoundaries >= document.body.clientHeight ? document.body.clientHeight : scrollWithBoundaries;
+      let scrollWithBoundaries = scrollY + window.innerHeight / 2 <= 0 ?
+          1 :
+          scrollY + window.innerHeight / 2;
+      scrollWithBoundaries = scrollWithBoundaries >=
+      document.body.clientHeight ?
+          document.body.clientHeight :
+          scrollWithBoundaries;
 
-      let pos = (scrollWithBoundaries / pixelsPerSection) >= contentLength ? contentLength-1 : Math.floor(scrollWithBoundaries / pixelsPerSection); 
+      let pos = (scrollWithBoundaries / pixelsPerSection) >= contentLength ?
+          contentLength - 1 :
+          Math.floor(scrollWithBoundaries / pixelsPerSection);
 
       if (this.context.contentIdx !== pos) {
         this.context.contentIdx = pos;
