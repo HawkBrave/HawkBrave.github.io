@@ -59,13 +59,13 @@ export default class Display {
         return;
       }
       this.container.children[0].append(scrollIndicator);
-      Utils.moveFromDisposition(scrollIndicator, 'up', -50, 50, this.context);
+      Utils.moveFromDisposition(scrollIndicator, 'up', -50, 80, this.context);
       Utils.unfade(scrollIndicator, this.context, 80)
       await Utils.sleepUntilContextIsFree(this.context, 'move');
       if (sitectx.contentIdx !== 0) {
         return;
       }
-      Utils.moveFromDisposition(scrollIndicator, 'down', 50, -20, this.context, 30, 0);
+      Utils.moveFromDisposition(scrollIndicator, 'down', 80, -20, this.context, 30, 0);
     }
   }
 
