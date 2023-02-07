@@ -42,7 +42,7 @@ export default class Controller {
       this.glController.initialize();
 
       this.display.load(this.canvas);
-      this.display.show(false);
+      this.display.show(this.context, false);
 
       await this.glController.draw();
 
@@ -54,7 +54,7 @@ export default class Controller {
     document.body.style.height = `${this.dispatcher.fileDict.length * 100}vh`;
 
     this.display.load(Utils.stringToHTML(payload));
-    await this.display.show(true);
+    await this.display.show(this.context, true);
   }
 
   _initializeCanvas() {
@@ -104,7 +104,7 @@ export default class Controller {
         this.context.contentIdx = pos;
         const payload = await this.dispatcher.loadFromContext(this.context);
         this.display.load(Utils.stringToHTML(payload));
-        await this.display.show(true);
+        await this.display.show(this.context, true);
       }
     });
 

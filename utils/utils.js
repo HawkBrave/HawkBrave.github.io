@@ -1,4 +1,5 @@
 export default class Utils {
+  static elname = null;
 
   static sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
@@ -7,7 +8,7 @@ export default class Utils {
   static sleepUntilContextIsFree(context, effect) {
     return new Promise(async r => {
       while (context.busy[effect]) {
-        await Utils.sleep(100);
+        await Utils.sleep(50);
       }
       r();
     });
@@ -43,7 +44,7 @@ export default class Utils {
     }, 50);
   }
 
-  static unfade(element, context) {
+  static unfade(element, context, speed=50) {
     context.busy['unfade'] = true;
     let op = 0.1;
     element.style.opacity = op; // initial opacity
@@ -56,85 +57,55 @@ export default class Utils {
       element.style.opacity = op;
       element.style.filter = 'alpha(opacity=' + op * 100 + ')';
       op += op * 0.1;
-    }, 50);
+    }, speed);
   }
 
-  static moveFromDisposition(element, direction, start, end, context) {
+  static moveFromDisposition(element, direction, start, end, context, speed=20, delay=10) {
+    if (Utils.elname !== null) {
+      return;
+    }
     context.busy['move'] = true;
+    Utils.elname = element.innerHTML;
     let pos = {x: start, y: start};
     let diff = (end - start);
     let i = 0;
+    let velocity = 0;
 
-    let timer = setInterval(function() {
-      if (pos.y >= end || !element) {
-        context.busy['move'] = false;
-        clearInterval(timer);
-        return;
-      }
-      element.style.bottom = `${pos.y}px`;
-      pos.y += diff * 0.01 + i * 0.2;
-      i++;
-    }, 20);
-  }
-
-  static move(element, direction, start, end, context) {
-    context.busy['move'] = true;
-    let diff = (end - start);
-    let pos = {x: start - (diff * 0.1), y: start - (diff * 0.1)};
-    let moveFunction;
-    let i = 0;
-
-    switch (direction.toLowerCase()) {
-      case 'down':
-        moveFunction = function() {
+    let timer = setInterval(() => {
+      switch (direction) {
+        case 'up':
           if (pos.y >= end || !element) {
+            Utils.elname = null;
             context.busy['move'] = false;
             clearInterval(timer);
             return;
           }
-          element.style.top = `${pos.y}px`;
-          pos.y += diff * 0.01 + i;
           i++;
-        };
-        break;
-      case 'up':
-      default:
-        moveFunction = function() {
-          if (pos.y >= end || !element) {
-            context.busy['move'] = false;
-            clearInterval(timer);
+          if (i <= delay) {
             return;
           }
           element.style.bottom = `${pos.y}px`;
-          pos.y += diff * 0.01 + i;
-          i++;
-        };
-        break;
-      case 'left':
-        moveFunction = function() {
-          if (pos.x >= end || !element) {
+          velocity = diff * .1 + .1;
+          pos.y += velocity;
+          diff = end - pos.y;
+          break;
+        case 'down':
+          if (pos.y <= end || !element) {
+            Utils.elname = null;
             context.busy['move'] = false;
             clearInterval(timer);
             return;
           }
-          element.style.right = `${pos.x}px`;
-          pos.x += diff * 0.01 + i;
           i++;
-        };
-        break;
-      case 'right':
-        moveFunction = function() {
-          if (pos.x >= end || !element) {
-            context.busy['move'] = false;
-            clearInterval(timer);
+          if (i <= delay) {
             return;
           }
-          element.style.left = `${pos.x}px`;
-          pos.x *= diff * 0.01 + i;
-          i++;
-        };
-        break;
-    }
-    let timer = setInterval(moveFunction, 20);
+          element.style.bottom = `${pos.y}px`;
+          velocity = diff * .1 + .1;
+          pos.y -= velocity;
+          diff = -end + pos.y;
+          break;
+      }
+    }, speed);
   }
 }
