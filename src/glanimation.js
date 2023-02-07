@@ -26,7 +26,7 @@ export default class GLAnimation {
 
     } else if (this.currentFrame === this.frameCount / 2) {
 
-      await Utils.sleep(1000);
+      await Utils.sleep(500);
 
     } else {
       this.globject.render({iterations: --this.globject.iterations});

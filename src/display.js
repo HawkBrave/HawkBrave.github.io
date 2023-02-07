@@ -14,9 +14,8 @@ export default class Display {
     this.node = node;
   }
 
-  async show(fading) {
+  async show(sitectx, fading) {
     if (this.title) {
-      //this.container.replaceChild(this.title, this.container.children[0]);
       this.node.children.namedItem('section-body').style.visibility = 'hidden';
       this.title.style.visibility = 'hidden';
       this.container.replaceChild(this.node, this.container.children[0]);
@@ -29,7 +28,6 @@ export default class Display {
       }
 
       await Utils.sleepUntilContextIsFree(this.context, 'unfade');
-      await Utils.sleep(100);
       Utils.moveFromDisposition(this.title, 'up',
           titlePos - this.getHeight() / 2, 0, this.context);
       await Utils.sleepUntilContextIsFree(this.context, 'move');
@@ -44,6 +42,30 @@ export default class Display {
     if (this.title) {
       this.container.children[0].insertBefore(this.title,
           this.container.children[0].children[0]);
+    }
+    if (sitectx.contentIdx === 0) {
+      await Utils.sleep(3000);
+      if (sitectx.contentIdx !== 0) {
+        return;
+      }
+      let scrollIndicator = document.createElement('span');
+      scrollIndicator.innerHTML = '>>>';
+      scrollIndicator.style.position = 'absolute';
+      scrollIndicator.style.transform = 'rotate(90deg) scale(1, 2)';
+      scrollIndicator.style.bottom = '-50px';
+      scrollIndicator.style.fontSize = '3vh';
+      scrollIndicator.style.color = 'var(--site-gray)';
+      if (sitectx.contentIdx !== 0) {
+        return;
+      }
+      this.container.children[0].append(scrollIndicator);
+      Utils.moveFromDisposition(scrollIndicator, 'up', -50, 50, this.context);
+      Utils.unfade(scrollIndicator, this.context, 80)
+      await Utils.sleepUntilContextIsFree(this.context, 'move');
+      if (sitectx.contentIdx !== 0) {
+        return;
+      }
+      Utils.moveFromDisposition(scrollIndicator, 'down', 50, -20, this.context, 30, 0);
     }
   }
 

@@ -4,9 +4,9 @@ export default class Dispatcher {
     this.fileDict = [
       'name.html',
       'whoami.html',
-      'about.html',
-      'interests.html',
+      'domain.html',
       'projects.html',
+      'contact.html',
       'mandelbrot.html',
     ];
   }

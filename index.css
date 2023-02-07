@@ -34,7 +34,7 @@ body {
 * {
   margin: 0;
   padding: 0;
-  font-family: 'EB Garamond 12';
+  font-family: 'EB Garamond 12', serif;
 }
 
 canvas {
@@ -43,11 +43,11 @@ canvas {
 }
 
 h1 {
-  font-size: 4.5vw;
+  font-size: 5vw;
 }
 
 h2 {
-  font-size: 3.5vw;
+  font-size: 4vw;
 }
 
 h3 {
@@ -56,6 +56,7 @@ h3 {
 
 p {
   text-align: justify;
+  color: var(--site-gray);
 }
 
 a {
@@ -65,8 +66,11 @@ a {
 
 ul {
   line-height: 2em;
+  list-style-position: inside;
+  /*
   list-style: none;
   text-align: center;
+  */
 }
 
 
@@ -91,7 +95,7 @@ ul {
 
 h2[name="section-title"] {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 div[name="section-body"] {
@@ -132,11 +136,11 @@ div[name="section-body"] {
   }
 
   h1 {
-    font-size: 5vh;
+    font-size: 6vh;
     top: -200px;
   }
   h2 {
-    font-size: 4vh;
+    font-size: 5vh;
   }
   h3 {
     font-size: 3vh;
