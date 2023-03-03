@@ -61,7 +61,7 @@ export default class Utils {
   }
 
   static moveFromDisposition(element, direction, start, end, context, speed=20, delay=10) {
-    if (Utils.elname !== null) {
+    if (Utils.elname !== null || !element) {
       return;
     }
     context.busy['move'] = true;
