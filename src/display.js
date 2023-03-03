@@ -14,6 +14,7 @@ export default class Display {
     this.node = node;
   }
 
+  // TODO fix this blasphemy of a function
   async show(sitectx, fading) {
     if (this.title) {
       this.node.children.namedItem('section-body').style.visibility = 'hidden';
@@ -44,9 +45,11 @@ export default class Display {
           this.container.children[0].children[0]);
     }
     if (sitectx.contentIdx === 0) {
-      await Utils.sleep(3000);
-      if (sitectx.contentIdx !== 0) {
-        return;
+      for (let i = 0; i < 100; i++) {
+        await Utils.sleep(30);
+        if (sitectx.contentIdx !== 0) {
+          return;
+        }
       }
       let scrollIndicator = document.createElement('span');
       scrollIndicator.innerHTML = '>>>';
