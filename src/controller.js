@@ -86,6 +86,7 @@ export default class Controller {
   listen() {
     let contentLength = this.dispatcher.fileDict.length;
     let pixelsPerSection = this.display.getBodyHeight() / contentLength;
+    //let flag = new Array(contentLength).fill(true);
 
     addEventListener('scroll', async event => {
       let scrollWithBoundaries = scrollY + window.innerHeight / 2 <= 0 ?

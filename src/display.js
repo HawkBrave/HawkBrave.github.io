@@ -3,7 +3,7 @@ import Utils from '../utils/utils.js';
 export default class Display {
   constructor() {
     this.container = document.querySelector('#container');
-    this.context = {busy: {unfade: false, move: false}};
+    this.context = { busy: { unfade: false, move: false } };
   }
 
   /**
@@ -30,7 +30,7 @@ export default class Display {
 
       await Utils.sleepUntilContextIsFree(this.context, 'unfade');
       Utils.moveFromDisposition(this.title, 'up',
-          titlePos - this.getHeight() / 2, 0, this.context);
+        titlePos - this.getHeight() / 2, 0, this.context);
       await Utils.sleepUntilContextIsFree(this.context, 'move');
     } else {
       this.container.replaceChild(this.node, this.container.children[0]);
@@ -42,14 +42,12 @@ export default class Display {
     }
     if (this.title) {
       this.container.children[0].insertBefore(this.title,
-          this.container.children[0].children[0]);
+        this.container.children[0].children[0]);
     }
     if (sitectx.contentIdx === 0) {
-      for (let i = 0; i < 100; i++) {
-        await Utils.sleep(30);
-        if (sitectx.contentIdx !== 0) {
-          return;
-        }
+      await Utils.sleep(3000);
+      if (sitectx.contentIdx !== 0) {
+        return;
       }
       let scrollIndicator = document.createElement('span');
       scrollIndicator.innerHTML = '>>>';
