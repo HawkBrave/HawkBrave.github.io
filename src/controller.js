@@ -76,13 +76,6 @@ export default class Controller {
     return context;
   }
 
-  /*
-  async _updateCycle() {
-    this.dispatcher.loadFromContext(this.context);
-    this.display.load()
-  }
-  */
-
   listen() {
     let contentLength = this.dispatcher.fileDict.length;
     let pixelsPerSection = this.display.getBodyHeight() / contentLength;
