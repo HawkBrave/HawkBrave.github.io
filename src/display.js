@@ -45,28 +45,33 @@ export default class Display {
         this.container.children[0].children[0]);
     }
     if (sitectx.contentIdx === 0) {
-      await Utils.sleep(3000);
+      if (this.scrollIndicator) {
+        return;
+      }
+      await Utils.sleep(2000);
       if (sitectx.contentIdx !== 0) {
         return;
       }
-      let scrollIndicator = document.createElement('span');
-      scrollIndicator.innerHTML = '>>>';
-      scrollIndicator.style.position = 'absolute';
-      scrollIndicator.style.transform = 'rotate(90deg) scale(1, 2)';
-      scrollIndicator.style.bottom = '-50px';
-      scrollIndicator.style.fontSize = '3vh';
-      scrollIndicator.style.color = 'var(--site-gray)';
+      this.scrollIndicator = document.createElement('span');
+      this.scrollIndicator.innerHTML = '>>>';
+      this.scrollIndicator.style.position = 'absolute';
+      this.scrollIndicator.style.transform = 'rotate(90deg) scale(1, 2)';
+      this.scrollIndicator.style.bottom = '-50px';
+      this.scrollIndicator.style.fontSize = '3vh';
+      this.scrollIndicator.style.color = 'var(--site-gray)';
       if (sitectx.contentIdx !== 0) {
         return;
       }
-      this.container.children[0].append(scrollIndicator);
-      Utils.moveFromDisposition(scrollIndicator, 'up', -50, 80, this.context);
-      Utils.unfade(scrollIndicator, this.context, 80)
+      this.container.children[0].append(this.scrollIndicator);
+      Utils.moveFromDisposition(this.scrollIndicator, 'up', -50, 80, this.context);
+      Utils.unfade(this.scrollIndicator, this.context, 80)
       await Utils.sleepUntilContextIsFree(this.context, 'move');
       if (sitectx.contentIdx !== 0) {
         return;
       }
-      Utils.moveFromDisposition(scrollIndicator, 'down', 80, -20, this.context, 30, 0);
+      Utils.moveFromDisposition(this.scrollIndicator, 'down', 80, -20, this.context, 30, 0);
+    } else {
+      this.scrollIndicator = null;
     }
   }
 
