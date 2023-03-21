@@ -25,20 +25,20 @@ export default class Display {
       this.title.style.visibility = 'visible';
 
       if (fading && !this.context.busy['unfade']) {
-        Utils.unfade(this.title, this.context);
+        Utils.unfade(this.title, this.context, undefined, sitectx);
       }
 
-      await Utils.sleepUntilContextIsFree(this.context, 'unfade');
+      await Utils.sleepUntilContextIsFree(this.context, 'unfade', sitectx);
       Utils.moveFromDisposition(this.title, 'up',
-        titlePos - this.getHeight() / 2, 0, this.context);
-      await Utils.sleepUntilContextIsFree(this.context, 'move');
+        titlePos - this.getHeight() / 2, 0, this.context, 20, 10, sitectx);
+      await Utils.sleepUntilContextIsFree(this.context, 'move', sitectx);
     } else {
       this.container.replaceChild(this.node, this.container.children[0]);
     }
 
     if (fading && !this.context.busy['unfade'] && !this.context.busy['move']) {
       this.node.children.namedItem('section-body').style.visibility = 'visible';
-      Utils.unfade(this.node.children.namedItem('section-body'), this.context);
+      Utils.unfade(this.node.children.namedItem('section-body'), this.context, undefined, sitectx);
     }
     if (this.title) {
       this.container.children[0].insertBefore(this.title,
@@ -48,10 +48,16 @@ export default class Display {
       if (this.scrollIndicator) {
         return;
       }
-      await Utils.sleep(2000);
+      for (let i = 0; i < 500; i++) {
+        await Utils.sleep(1);
+        if (sitectx.contentIdx !== 0) {
+          return;
+        }
+      }
       if (sitectx.contentIdx !== 0) {
         return;
       }
+      
       this.scrollIndicator = document.createElement('span');
       this.scrollIndicator.innerHTML = '>>>';
       this.scrollIndicator.style.position = 'absolute';
@@ -63,13 +69,13 @@ export default class Display {
         return;
       }
       this.container.children[0].append(this.scrollIndicator);
-      Utils.moveFromDisposition(this.scrollIndicator, 'up', -50, 80, this.context);
-      Utils.unfade(this.scrollIndicator, this.context, 80)
-      await Utils.sleepUntilContextIsFree(this.context, 'move');
+      Utils.moveFromDisposition(this.scrollIndicator, 'up', -50, 80, this.context, 20, 10, sitectx);
+      Utils.unfade(this.scrollIndicator, this.context, 80, sitectx);
+      await Utils.sleepUntilContextIsFree(this.context, 'move', sitectx);
       if (sitectx.contentIdx !== 0) {
         return;
       }
-      Utils.moveFromDisposition(this.scrollIndicator, 'down', 80, -20, this.context, 30, 0);
+      Utils.moveFromDisposition(this.scrollIndicator, 'down', 80, -20, this.context, 30, 0, sitectx);
     } else {
       this.scrollIndicator = null;
     }

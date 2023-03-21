@@ -5,13 +5,27 @@ export default class Utils {
     return new Promise(r => setTimeout(r, ms));
   }
 
-  static sleepUntilContextIsFree(context, effect) {
+  static sleepUntilContextIsFree(context, effect, sitectx) {
+    let current = sitectx.contentIdx;
     return new Promise(async r => {
       while (context.busy[effect]) {
-        await Utils.sleep(50);
+        if (sitectx.contentIdx !== current) {
+          return;
+        }
+        await Utils.sleep(1);
       }
       r();
     });
+  }
+
+  static async sleepUntilSiteCtxChanges(sitectx, ms) {
+    let current = sitectx.contentIdx;
+    for (let i = 0; i < ms; i++) {
+      if (sitectx.contentIdx !== current) {
+        return;
+      }
+      await this.sleep(1);
+    }
   }
 
   static stringToHTML(str) {
@@ -44,12 +58,13 @@ export default class Utils {
     }, 50);
   }
 
-  static unfade(element, context, speed=50) {
+  static unfade(element, context, speed=50, sitectx) {
+    let current = sitectx.contentIdx;
     context.busy['unfade'] = true;
     let op = 0.1;
     element.style.opacity = op; // initial opacity
     const timer = setInterval(function() {
-      if (op >= 1 || !element) {
+      if (op >= 1 || !element || sitectx.contentIdx !== current) {
         context.busy['unfade'] = false;
         clearInterval(timer);
         return;
@@ -60,7 +75,8 @@ export default class Utils {
     }, speed);
   }
 
-  static moveFromDisposition(element, direction, start, end, context, speed=20, delay=10) {
+  static moveFromDisposition(element, direction, start, end, context, speed=20, delay=10, sitectx) {
+    let current = sitectx.contentIdx;
     if (Utils.elname !== null || !element) {
       return;
     }
@@ -74,7 +90,7 @@ export default class Utils {
     let timer = setInterval(() => {
       switch (direction) {
         case 'up':
-          if (pos.y >= end || !element) {
+          if (pos.y >= end || !element || sitectx.contentIdx !== current) {
             Utils.elname = null;
             context.busy['move'] = false;
             clearInterval(timer);
@@ -90,7 +106,7 @@ export default class Utils {
           diff = end - pos.y;
           break;
         case 'down':
-          if (pos.y <= end || !element) {
+          if (pos.y <= end || !element || sitectx.contentIdx !== current) {
             Utils.elname = null;
             context.busy['move'] = false;
             clearInterval(timer);

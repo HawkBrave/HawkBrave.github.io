@@ -45,16 +45,9 @@ export default class Controller {
       this.display.show(this.context, false);
 
       await this.glController.draw();
-
-      this.context.contentIdx = 0;
     }
 
-    const payload = await this.dispatcher.loadFromContext(this.context);
-    // TODO: make webpage long (scrollable)
     document.body.style.height = `${this.dispatcher.fileDict.length * 100}vh`;
-
-    this.display.load(Utils.stringToHTML(payload));
-    await this.display.show(this.context, true);
   }
 
   _initializeCanvas() {
@@ -65,11 +58,10 @@ export default class Controller {
   }
 
   _initializeContext() {
-    const context = new SiteCtx(0);
+    const context = new SiteCtx(-1);
 
     const glContext = this.canvas.getContext('webgl');
     if (glContext !== null) {
-      context.contentIdx = -1;
       context.gl = glContext;
     }
 
@@ -79,8 +71,7 @@ export default class Controller {
   listen() {
     let contentLength = this.dispatcher.fileDict.length;
     let pixelsPerSection = this.display.getBodyHeight() / contentLength;
-
-    addEventListener('scroll', async event => {
+    const scrollEvent = async event => {
       let scrollWithBoundaries = scrollY + window.innerHeight / 2 <= 0 ?
           1 :
           scrollY + window.innerHeight / 2;
@@ -99,6 +90,9 @@ export default class Controller {
         this.display.load(Utils.stringToHTML(payload));
         await this.display.show(this.context, true);
       }
-    });
+    }
+    scrollEvent();
+
+    addEventListener('scroll', scrollEvent);
   }
 }
